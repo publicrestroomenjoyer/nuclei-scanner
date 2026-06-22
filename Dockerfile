@@ -1,15 +1,17 @@
 FROM projectdiscovery/nuclei:latest
 
-USER root
-
 RUN apk add --no-cache python3 py3-pip
 
 WORKDIR /app
 
 COPY . .
 
-RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
+RUN python3 -m venv /app/venv
+RUN /app/venv/bin/pip install --upgrade pip
+RUN /app/venv/bin/pip install -r requirements.txt
 
 EXPOSE 10000
 
-CMD gunicorn app:app --bind 0.0.0.0:10000
+ENTRYPOINT []
+
+CMD ["/app/venv/bin/gunicorn", "app:app", "--bind", "0.0.0.0:10000"]
